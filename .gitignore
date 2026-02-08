@@ -1,0 +1,53 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+dist/
+build/
+
+# React Native
+.expo/
+.expo-shared/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Laravel
+/ZoneMarketplaceBackend/vendor/
+/ZoneMarketplaceBackend/.env
+/ZoneMarketplaceBackend/.env.backup
+/ZoneMarketplaceBackend/storage/logs/
+/ZoneMarketplaceBackend/bootstrap/cache/
+/ZoneMarketplaceBackend/.phpunit.result.cache
+
+# Production
+/build
+/dist

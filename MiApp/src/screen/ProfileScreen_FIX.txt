@@ -1,0 +1,20 @@
+INSTRUCION MANUAL PARA ARREGLAR AVATAR:
+
+1. En ProfileScreen.js, línea ~48, donde está:
+   const [avatar, setAvatar] = useState(userData.avatar);
+   
+   CAMBIAR A:
+   const [avatar, setAvatar] = useState(userData.avatar);
+   const [avatarRefresh, setAvatarRefresh] = useState(0);
+
+2. En ProfileScreen.js, línea ~230, donde está:
+            // Actualizar estado local con URL del servidor
+            setAvatar(bustCache(response.avatar));
+            
+   CAMBIAR A:
+            // Forzar re-render limpio: resetear a null y luego establecer nueva URL
+            setAvatar(null);
+            setAvatarRefresh(prev => prev + 1);
+            setTimeout(() => {
+              setAvatar(bustCache(response.avatar));
+            }, 50);

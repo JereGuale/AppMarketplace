@@ -1,0 +1,73 @@
+.register-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #b30000, #7a0000, #cc0000);
+  font-family: "Poppins", sans-serif;
+  color: white;
+}
+
+.register-box {
+  width: 400px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 0 35px rgba(0,0,0,0.35);
+}
+
+.logo {
+  width: 110px;
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* inputs */
+label {
+  margin-top: 15px;
+  display: block;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  font-size: 16px;
+}
+
+.register-btn {
+  width: 100%;
+  margin-top: 25px;
+  padding: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ff5858, #ff1a1a);
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.register-btn:hover {
+  filter: brightness(1.2);
+}
+
+.login-text {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.login-text a {
+  font-weight: bold;
+}

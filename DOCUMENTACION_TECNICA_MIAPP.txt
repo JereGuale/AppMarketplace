@@ -1,0 +1,63 @@
+DOCUMENTACION TECNICA - APP MOVIL MARKETPLACE
+
+3.1 INTRODUCCION
+- Nombre: MiApp (Marketplace de compra/venta con panel admin).
+- Proposito: conectar compradores y vendedores, habilitar chat y gestion administrativa.
+- Necesidad que atiende: publicar productos locales, chatear, recibir notificaciones y permitir control de calidad/seguridad via panel admin.
+
+3.2 TECNOLOGIAS UTILIZADAS
+- Frontend: React Native con Expo 54, React 19, React Native 0.81.5, react-native-svg, expo-linear-gradient, expo-image-picker, expo-location, AsyncStorage.
+- Navegacion y estado: gestion de pantallas manual en App.js con hooks (useState/useEffect) y almacenamiento de sesion en AsyncStorage.
+- Backend/API: Laravel (Sanctum para auth), endpoints REST definidos en ZoneMarketplaceBackend/routes/api.php, subida de archivos via storage Laravel.
+- UI/Iconos: lucide-react-native, MaterialCommunityIcons (expo), expo-blur.
+- Persistencia local: AsyncStorage (tokens, userData, cache de avatares/conversaciones/notificaciones).
+- Servicios auxiliares: resolucion de API base con ENV EXPO_PUBLIC_API_BASE o auto-descubrimiento (resolveApiBase en src/service/api.js).
+
+3.3 PANTALLAS Y FUNCIONALIDADES PRINCIPALES
+- LoginScreen: acceso de usuario o admin (toggle loginMode); guarda token y userData en AsyncStorage; feedback de errores y loader.
+- RegisterScreen: formulario de alta con nombre, email, telefono (+593), ciudad, password; valida longitudes y coincidencia de contrasena.
+- HomeScreen: listado de productos, buscador y filtros por categoria, destacados con scroll, like local, badge de notificaciones, acceso a perfil/publicar/mensajes.
+- PublishScreen: publica producto con titulo, precio, descripcion, ubicacion (GPS o manual), categoria y hasta 6 imagenes; convierte imagenes a base64 y envia a /api/products.
+- ProductDetailScreen: galeria de imagenes, precio, descripcion, vendedor (avatar seguro), acciones de chat y edicion/eliminacion si es dueno.
+- MessagesScreen: lista conversaciones (cache + API), contador de no leidos, preview ultimo mensaje, ocultar conversaciones.
+- ChatScreenMessages: chat por producto/conversacion, envios de texto (y base para imagen), oculta chat, reporta vendedor.
+- NotificationsScreen: lista notificaciones, marcar todas o una como leida, borrar cache local.
+- ProfileScreen (usuario y vendorProfile): ver/editar perfil y productos propios, actualizar avatar, logout.
+- AdminPanelScreen: dashboard con KPIs (usuarios, bans, clientes/proveedores nuevos) y navegacion a modulos admin; logout.
+- AdminUsersScreen: listar/filtrar usuarios, ban temporal/permanente, desbanear, resetear password, ver/eliminar publicaciones de usuario.
+- AdminDisputesScreen: listar disputas, ver detalles, resolver con decision y porcentaje de reembolso.
+- AdminReviewsScreen: listar reseñas, filtrar ofensivas/ocultas, ocultar/mostrar con razon.
+- AdminLogsScreen: auditoria filtrable por accion (ban_user, hide_review, resolve_dispute, etc.).
+
+3.4 VALIDACIONES IMPLEMENTADAS
+- Login: campos email y contrasena obligatorios; alerta si faltan; rol admin requiere loginMode=admin.
+- Registro: todos los campos obligatorios; nombre solo letras/espacios y max 80 chars; password minimo 6 y coincide con confirmacion.
+- Publicacion: requiere titulo, precio numerico > 0, descripcion, categoria, ubicacion y al menos 1 imagen; max 6 imagenes; previene clicks repetidos; obtiene ubicacion con permisos, fallback a Nominatim o coords; mensajes de error/loader.
+- Conversaciones/Chat: evita enviar sin texto/imagen; comprueba token antes de llamar API; oculta chats guardando hidden_conversations.
+- Notificaciones: marca leidas solo si usuario autenticado; cache limpia al borrar todas.
+- Admin acciones: valida campos segun accion (horas/razon para ban, contrasena minima 6 para reset), muestra alertas de exito/error.
+
+3.5 PERSISTENCIA DE DATOS / CONSUMO DE APIs
+- Autenticacion: /api/login y /api/register; tokens guardados en AsyncStorage (userToken, zm_token opcional) y usados en headers Bearer.
+- Productos: publicacion PUT/POST/DELETE a /api/products, /api/products/{id}, /api/my-products; subida de imagenes base64; marca vendidos y elimina.
+- Conversaciones/Mensajes: /api/conversations, /api/conversations/{id}, /api/messages (store); cache en AsyncStorage para modo offline parcial.
+- Notificaciones: /api/notifications (listar), /api/notifications/{id}/read y /api/notifications/read-all; elimina locales al borrar.
+- Perfil/Avatar: /api/user/profile (PUT) y /api/user/avatar (FormData con archivo o blob); cache de avatares por id en AsyncStorage.
+- Panel Admin (prefijo /api/admin): dashboard, gestion de usuarios (ban/unban/reset-password/historial), reseñas (hide/show), disputas (resolve/evidence), productos de usuario y logs.
+- Resolucion de base URL: resolveApiBase usa ENV EXPO_PUBLIC_API_BASE, o host de Expo, o localhost/10.0.2.2 segun plataforma.
+
+3.6 CAPTURAS DE PANTALLA (colocar 3-5 imgs en la entrega)
+- Captura 1: Login/Registro con modo admin.
+- Captura 2: Home con destacados, categorias y grid de productos.
+- Captura 3: Pantalla de publicacion con formulario e imagenes.
+- Captura 4: Chat o bandeja de mensajes con conteo de no leidos.
+- Captura 5: Panel de administracion (dashboard o gestion de usuarios/disputas).
+
+3.7 CONCLUSIONES (sugerido)
+- La app cubre ciclo completo marketplace: registro, publicacion, navegacion, chat, notificaciones y control administrativo.
+- Uso de AsyncStorage reduce friccion al persistir sesion y cachear datos clave.
+- Backend Laravel con Sanctum proporciona seguridad y endpoints REST claros para movil y panel admin.
+
+NOTAS DE ENTREGA
+- Acompanhar la demo con las capturas anteriores y, si aplica, mencionar servidor/ENV usado para pruebas (EXPO_PUBLIC_API_BASE).
+- Verificar que el backend este levantado (php artisan serve --host=0.0.0.0 --port=8000) antes de probar Expo.

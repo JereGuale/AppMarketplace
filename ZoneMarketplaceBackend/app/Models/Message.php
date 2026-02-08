@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Message extends Model
+{
+    protected $fillable = [
+        'conversation_id',
+        'sender_id',
+        'text',
+        'image',
+        'read',
+    ];
+
+    protected $casts = [
+        'read' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public function conversation()
+    {
+        return $this->belongsTo(Conversation::class);
+    }
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
+}
